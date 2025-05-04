@@ -5,6 +5,11 @@ import {
   findInvalidTokens,
   wrapText,
 } from '../utils/tibasic';
+import {
+  removeAndExtract,
+  insertNode,
+  findTarget,
+} from "../utils/treeUtils";
 
 // Custom hook managing application logic and state
 export default function useAppLogic() {
@@ -133,58 +138,45 @@ export default function useAppLogic() {
       setEditingContent('');
     }
   };
+
   // Move or reorder an item via drag-and-drop
   const moveItem = (itemId, targetId, position = 'inside') => {
     if (itemId === targetId) return;
-    // Remove item and get it
-    let moved = null;
-    const removeAndExtract = (node) => {
-      if (!node.children) return node;
-      const newChildren = [];
-      for (const c of node.children) {
-        if (c.id === itemId) {
-          moved = c;
-        } else {
-          newChildren.push(removeAndExtract(c));
-        }
-      }
-      return { ...node, children: newChildren };
-    };
-    const without = removeAndExtract(appStructure.root);
-    if (!moved) return;
-    // Find insertion point
-    const findTarget = (node) => {
-      if (node.id === targetId && node.type === 'menu' && position === 'inside') {
-        return { parent: node, index: node.children.length };
-      }
-      if (node.children) {
-        for (let i=0;i<node.children.length;i++) {
-          const c = node.children[i];
-          if (c.id === targetId) {
-            const idx = position === 'before' ? i : i+1;
-            return { parent: node, index: idx };
-          }
-          const found = findTarget(c);
-          if (found) return found;
-        }
-      }
-      return null;
-    };
-    const targetInfo = findTarget(without);
-    if (!targetInfo) return;
-    const { parent, index } = targetInfo;
-    // Insert moved
-    const insert = (node) => {
-      if (node.id === parent.id) {
-        const ch = [...node.children]; ch.splice(index, 0, moved);
-        return { ...node, children: ch };
-      } else if (node.children) {
-        return { ...node, children: node.children.map(insert) };
-      }
-      return node;
-    };
-    setAppStructure(prev => ({ ...prev, root: insert(without) }));
+
+    setAppStructure(prev =>{
+
+      // 0. strip dragged node from the tree
+      const { tree: withoutDragged, extracted: dragged } = removeAndExtract(appStructure.root, itemId);
+      if (!dragged) return prev;
+
+      // 1. find a legal insertion point
+      const targetInfo = findTarget(withoutDragged, {
+        draggedId      : itemId,
+        targetId,
+        position,
+        maxItemsPerMenu: appStructure.max_items_per_menu
+      });
+      if (!targetInfo) return prev;             // illegal move – do nothing
+
+      // 1a. check if the target is the same as the dragged item
+      const sameParent =
+        targetInfo.parent.id === dragged.parentId;       // parentId you stored in dragged
+      const oldIndex   = dragged.indexInParent;          // ..or compute on the fly
+      if (sameParent && targetInfo.index === oldIndex) return prev;
+
+      // 2. insert and commit
+      const updatedRoot = insertNode(
+        withoutDragged,
+        targetInfo.parent.id,
+        targetInfo.index,
+        dragged
+      );
+
+      return { ...prev, root: updatedRoot };
+    });
+
   };
+
   // Update an item's properties
   const updateItem = (itemId, updates) => {
     const recurse = (node) => {
