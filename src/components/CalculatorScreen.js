@@ -55,6 +55,9 @@ export default function CalculatorScreen({
   let screenContent;
   if (!selectedItem) {
     screenContent = <div className="screen-message">Select a menu or note to preview</div>;
+  } else if (selectedItem.type === 'code') {
+    // TODO: handle code preview
+    screenContent = <div className="screen-message">[Raw code emulation not yet implemented]</div>;
   } else {
     const section = findCodeSection();
     if (!section) {

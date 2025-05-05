@@ -86,11 +86,15 @@ export default function useAppLogic() {
     validateAllNotes();
   }, [appStructure.validTokens]);
 
-  // Select an item
+  // Select an item (menu, note, or code block)
   const onSelect = (item) => {
     setSelectedItem(item);
-    if (item.type === 'note' && item.content != null) {
+    // For notes and code blocks, load their content into the editor
+    if ((item.type === 'note' || item.type === 'code') && item.content != null) {
       setEditingContent(item.content);
+    } else {
+      // clear editor for menus or items without content
+      setEditingContent('');
     }
   };
   // Add a submenu or a note under a parent menu
@@ -99,10 +103,18 @@ export default function useAppLogic() {
     const newId = `item-${appStructure.nextId}`;
     const newItem = {
       id: newId,
-      title: type === 'menu' ? 'New Submenu' : 'New Note',
+      title: type === 'menu'
+        ? 'New Submenu'
+        : type === 'note'
+          ? 'New Note'
+          : 'New Code',
       type: type,
       children: type === 'menu' ? [] : null,
-      content: type === 'note' ? 'Enter note content here...' : null,
+      content: type === 'note'
+        ? 'Enter note content here...'
+        : type === 'code'
+          ? 'Enter TI-Basic code here...'
+          : null,
     };
     // Insert into tree
     const updateTree = (node) => {
@@ -119,7 +131,7 @@ export default function useAppLogic() {
       root: updateTree(prev.root),
     }));
     setSelectedItem(newItem);
-    if (type === 'note') setEditingContent(newItem.content);
+    if (type === 'note' || type === 'code') setEditingContent(newItem.content);
   };
   // Delete an item from the structure
   const deleteItem = (itemId) => {
@@ -196,7 +208,7 @@ export default function useAppLogic() {
   const handleContentChange = (e) => {
     const newContent = e.target.value;
     setEditingContent(newContent);
-    if (selectedItem && selectedItem.type === 'note') {
+    if (selectedItem && selectedItem.type === 'note') {  // if editing a note, check for invalid tokens
       updateItem(selectedItem.id, { content: newContent });
       const invalid = findInvalidTokens(newContent, appStructure.validTokens);
       setAppStructure(prev => {
@@ -235,6 +247,9 @@ export default function useAppLogic() {
         }
       }
       setLineBreakInfo(prev => ({ ...prev, [selectedItem.id]: info }));
+    } else if (selectedItem && selectedItem.type === 'code') {
+      // Update raw code content for code blocks
+      updateItem(selectedItem.id, { content: newContent });
     }
   };
   // Update application settings

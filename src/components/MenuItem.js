@@ -3,7 +3,7 @@ import { useDrag, useDrop } from 'react-dnd';
 import {findTarget} from "../utils/treeUtils";
 
 // Draggable and droppable menu/note item component
-export default function MenuItem({ item, onSelect, onAddMenu, onAddNote, onDelete, onMove, selected, isRootMenu = false, appStructure }) {
+export default function MenuItem({ item, onSelect, onAddMenu, onAddNote, onAddCode, onDelete, onMove, selected, isRootMenu = false, appStructure }) {
   const [dropPosition, setDropPosition] = useState(null);
   const [isCollapsed, setIsCollapsed] = useState(false);
   const [isHoveringInsideDisallowed, setIsHoveringInsideDisallowed] = useState(false);
@@ -140,6 +140,9 @@ export default function MenuItem({ item, onSelect, onAddMenu, onAddNote, onDelet
               <button className={`icon-button add-note ${isLimitReached ? 'limit-reached' : ''}`} title={isLimitReached ? limitReachedTitle : 'Add Note'} onClick={(e) => { e.stopPropagation(); onAddNote(item.id); }} disabled={isLimitReached}>
                 📝+
               </button>
+              <button className={`icon-button add-code ${isLimitReached ? 'limit-reached' : ''}`} title={isLimitReached ? limitReachedTitle : 'Add Code Block'} onClick={(e) => { e.stopPropagation(); onAddCode(item.id); }} disabled={isLimitReached}>
+                💻+
+              </button>
             </>
           )}
           {!isRootMenu && (
@@ -152,7 +155,19 @@ export default function MenuItem({ item, onSelect, onAddMenu, onAddNote, onDelet
       {hasChildren && !isCollapsed && (
         <div className={`item-children ${isRootMenu ? 'root-children' : ''}`} onClick={(e) => e.stopPropagation()}>
           {item.children.map(child => (
-            <MenuItem key={child.id} item={child} onSelect={onSelect} onAddMenu={onAddMenu} onAddNote={onAddNote} onDelete={onDelete} onMove={onMove} selected={selected} isRootMenu={false} appStructure={appStructure} />
+            <MenuItem
+              key={child.id}
+              item={child}
+              onSelect={onSelect}
+              onAddMenu={onAddMenu}
+              onAddNote={onAddNote}
+              onAddCode={onAddCode}
+              onDelete={onDelete}
+              onMove={onMove}
+              selected={selected}
+              isRootMenu={false}
+              appStructure={appStructure}
+            />
           ))}
         </div>
       )}

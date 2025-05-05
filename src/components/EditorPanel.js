@@ -44,6 +44,16 @@ export default function EditorPanel({
               )}
             </div>
           )}
+          {selectedItem.type === 'code' && (
+            <div className="code-content">
+              <label>TI-Basic Code:</label>
+              <textarea
+                value={editingContent}
+                onChange={onContentChange}
+                rows="10"
+              />
+            </div>
+          )}
         </div>
       ) : (
         <div className="no-selection">

@@ -56,6 +56,7 @@ function App() {
               onSelect={onSelect}
               onAddMenu={(id) => addItem(id, 'menu')}
               onAddNote={(id) => addItem(id, 'note')}
+              onAddCode={(id) => addItem(id, 'code')}
               onDelete={deleteItem}
               onMove={moveItem}
               selected={selectedItem ? selectedItem.id : null}

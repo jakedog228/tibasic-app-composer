@@ -44,6 +44,23 @@ export function generateTIBasicCode(appStructure) {
       this.next_index += 1;
       return label;
     },
+    // Add a raw TI-Basic code block (direct injection)
+    add_code: function(parent_label, name, content) {
+      const parent = this.pages[parent_label];
+      if (!parent || parent.type !== 'menu') {
+        throw new Error(`Parent ${parent_label} is not a valid menu`);
+      }
+      const nav_count = 1;
+      const potential_count = parent.entries.length + 1 + nav_count;
+      if (potential_count > 9) {
+        throw new Error("Menu cannot have more than 9 options (incl. navigation)");
+      }
+      const label = this._generate_label();
+      this.pages[label] = { type: 'code', label, content, parent_label };
+      parent.entries.push({ name, target_label: label });
+      this.page_order.push(label);
+      return label;
+    },
     add_menu: function(title, parent_label = null) {
       const label = this._generate_label();
       const menu = { label, title, entries: [], parent_label };
@@ -141,6 +158,15 @@ export function generateTIBasicCode(appStructure) {
             parts.push(`"Quit"`, this.quit_label);
           }
           output += `:Menu(${parts.join(',')})\n\n`;
+        } else if (page.type === 'code') {
+          // Inject raw TI-Basic code block
+          const rawLines = page.content.replace(/\r\n?/g, '\n').split('\n');
+          for (const line of rawLines) {
+            if (line.trim() === '') continue;
+            output += line.startsWith(':') ? `${line}\n` : `:${line}\n`;
+          }
+          // After code block, return to parent menu
+          output += `:Goto ${page.parent_label}\n\n`;
         } else if (page.type === 'note') {
           output += `:ClrHome\n`;
           // Render note content with pauses and page breaks
@@ -192,6 +218,10 @@ export function generateTIBasicCode(appStructure) {
       } else if (item.type === 'note') {
         if (parentLabel !== null) {
           app.add_note(parentLabel, item.title, item.content || '');
+        }
+      } else if (item.type === 'code') {
+        if (parentLabel !== null) {
+          app.add_code(parentLabel, item.title, item.content || '');
         }
       }
     } catch (error) {
@@ -266,8 +296,27 @@ export function parseBasicCode(code) {
         const content = sections.join('\n\n');
         pageMap[label] = { type: 'note', label, content, parentLabel };
       } else if (lines[1].includes(':Stop')) {
+        // Quit page
         quitPage = { label };
         pageMap[label] = { type: 'quit', label };
+      } else {
+        // Unrecognized page structure: treat as raw code block
+        // Find parent via any Goto statement
+        let parentLabel = null;
+        for (const l of lines) {
+          const m = l.match(/:Goto\s+([A-Z]{2})/);
+          if (m) { parentLabel = m[1]; break; }
+        }
+        // Drop the label line and capture raw TI-Basic lines
+        let rawLines = lines.slice(1);
+        // If the final line is a navigation Goto, remove it
+        if (rawLines.length > 0 && /^:Goto\s+[A-Z]{2}$/.test(rawLines[rawLines.length - 1].trim())) {
+          rawLines.pop();
+        }
+        // Strip leading colons for editor consistency
+        const stripped = rawLines.map(l => (l.startsWith(':') ? l.slice(1) : l));
+        const content = stripped.join('\n');
+        pageMap[label] = { type: 'code', label, content, parentLabel };
       }
     });
     const rootMenu = menuPages.find(p => !p.parentLabel);
@@ -283,6 +332,8 @@ export function parseBasicCode(code) {
             if (child) node.children.push(child);
           } else if (tgt.type === 'note') {
             node.children.push({ id: `item-${e.targetLabel}`, title: e.name, type: 'note', content: tgt.content });
+          } else if (tgt.type === 'code') {
+            node.children.push({ id: `item-${e.targetLabel}`, title: e.name, type: 'code', content: tgt.content });
           }
         }
       }

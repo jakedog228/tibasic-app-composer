@@ -435,6 +435,17 @@
   min-height: 200px;
 }
 
+.code-content {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.code-content textarea {
+  resize: vertical;
+  min-height: 200px;
+}
+
 .code-preview pre {
   background-color: #f5f5f5;
   border: 1px solid #ccc;

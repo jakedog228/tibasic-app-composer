@@ -7,6 +7,7 @@ export default function MenuTree({
   onSelect,
   onAddMenu,
   onAddNote,
+  onAddCode,
   onDelete,
   onMove,
   selected,
@@ -19,6 +20,7 @@ export default function MenuTree({
         onSelect={onSelect}
         onAddMenu={onAddMenu}
         onAddNote={onAddNote}
+        onAddCode={onAddCode}
         onDelete={onDelete}
         onMove={onMove}
         selected={selected}
