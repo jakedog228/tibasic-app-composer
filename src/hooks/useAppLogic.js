@@ -69,21 +69,27 @@ export default function useAppLogic() {
 
   // Validate all notes when valid tokens are loaded or structure resets
   useEffect(() => {
-    function validateAllNotes() {
+    // Validate all notes and code blocks when valid tokens load
+    function validateAllTextItems() {
       if (!appStructure.validTokens || appStructure.validTokens.length === 0) return;
       const invalidMap = {};
       const checkItem = (item) => {
-        if (item.type === 'note' && item.content) {
-          const invalid = findInvalidTokens(item.content, appStructure.validTokens);
+        if ((item.type === 'note' || item.type === 'code') && item.content) {
+          const invalid = findInvalidTokens(
+            item.content,
+            appStructure.validTokens,
+            item.type === 'note' // only forbid quotes/backslashes in notes
+          );
           if (invalid.length) invalidMap[item.id] = invalid;
-        } else if (item.children) {
+        }
+        if (item.children) {
           item.children.forEach(checkItem);
         }
       };
       if (appStructure.root) checkItem(appStructure.root);
       setAppStructure(prev => ({ ...prev, invalidTokensMap: invalidMap }));
     }
-    validateAllNotes();
+    validateAllTextItems();
   }, [appStructure.validTokens]);
 
   // Select an item (menu, note, or code block)
@@ -113,7 +119,7 @@ export default function useAppLogic() {
       content: type === 'note'
         ? 'Enter note content here...'
         : type === 'code'
-          ? 'Enter TI-Basic code here...'
+          ? 'Disp "write any code here!"'
           : null,
     };
     // Insert into tree
@@ -208,11 +214,15 @@ export default function useAppLogic() {
   const handleContentChange = (e) => {
     const newContent = e.target.value;
     setEditingContent(newContent);
-    if (selectedItem && selectedItem.type === 'note') {  // if editing a note, check for invalid tokens
+    if (selectedItem && (selectedItem.type === 'note' || selectedItem.type === 'code')) {
+      // Update item content
       updateItem(selectedItem.id, { content: newContent });
-      const invalid = findInvalidTokens(newContent, appStructure.validTokens);
+      const invalid = findInvalidTokens(
+        newContent,
+        appStructure.validTokens,
+        selectedItem.type === 'note' // only forbid quotes/backslashes in notes
+      );
       setAppStructure(prev => {
-        // Update invalidTokensMap: add if invalid tokens exist, remove entry if none
         const newInvalidMap = { ...prev.invalidTokensMap };
         if (invalid.length) {
           newInvalidMap[selectedItem.id] = invalid;
@@ -224,32 +234,33 @@ export default function useAppLogic() {
           invalidTokensMap: newInvalidMap
         };
       });
-      // Analyze line breaks
-      const info = { wrappedLines: [], screenBreaks: [] };
-      const lines = newContent.split(/\n{3,}/).map(p =>
-        p.split(/\n{2}/).map(sp => sp.split(/\n/)).flat()
-      ).flat();
-      let lineCount = 0;
-      let lineIdx = 0;
-      const contentLines = newContent.split("\n");
-      let charCount = 0;
-      for (const para of lines) {
-        const wrapped = wrapText(para, appStructure.chars_per_line);
-        if (wrapped.length > 1) info.wrappedLines.push(lineIdx);
-        lineCount += wrapped.length;
-        if (lineCount >= appStructure.lines_per_screen) {
-          info.screenBreaks.push(lineIdx);
-          lineCount = 0;
+      // For notes only: analyze line breaks
+      if (selectedItem.type === 'note') {
+        const info = { wrappedLines: [], screenBreaks: [] };
+        const lines = newContent
+          .split(/\n{3,}/)
+          .map(p => p.split(/\n{2}/).map(sp => sp.split(/\n/)).flat())
+          .flat();
+        let lineCount = 0, lineIdx = 0, charCount = 0;
+        const contentLines = newContent.split("\n");
+        for (const para of lines) {
+          const wrapped = wrapText(para, appStructure.chars_per_line);
+          if (wrapped.length > 1) info.wrappedLines.push(lineIdx);
+          lineCount += wrapped.length;
+          if (lineCount >= appStructure.lines_per_screen) {
+            info.screenBreaks.push(lineIdx);
+            lineCount = 0;
+          }
+          charCount += para.length + 1;
+          while (
+            lineIdx < contentLines.length &&
+            charCount > contentLines.slice(0, lineIdx + 1).join("\n").length
+          ) {
+            lineIdx++;
+          }
         }
-        charCount += para.length + 1;
-        while (lineIdx < contentLines.length && charCount > contentLines.slice(0, lineIdx+1).join("\n").length) {
-          lineIdx++;
-        }
+        setLineBreakInfo(prev => ({ ...prev, [selectedItem.id]: info }));
       }
-      setLineBreakInfo(prev => ({ ...prev, [selectedItem.id]: info }));
-    } else if (selectedItem && selectedItem.type === 'code') {
-      // Update raw code content for code blocks
-      updateItem(selectedItem.id, { content: newContent });
     }
   };
   // Update application settings

@@ -80,8 +80,8 @@ function App() {
               content={editingContent}
               generatedCode={generatedCode}
             />
-            {/* Token validation warning for unrecognized tokens in notes */}
-            {selectedItem && selectedItem.type === 'note' &&
+            {/* Token validation warning for unrecognized tokens in notes or code */}
+            {selectedItem && (selectedItem.type === 'note' || selectedItem.type === 'code') &&
               appStructure.invalidTokensMap[selectedItem.id] &&
               appStructure.invalidTokensMap[selectedItem.id].length > 0 && (
               <div className="token-warning">

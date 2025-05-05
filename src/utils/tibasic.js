@@ -395,7 +395,7 @@ export function parseNoteCode(code) {
 }
 
 // Identify invalid tokens within note content given a list of valid tokens
-export function findInvalidTokens(content, validTokens) {
+export function findInvalidTokens(content, validTokens, forbidSpecial = true) {
   if (!validTokens || validTokens.length === 0) { return []; }
   const validSet = new Set(validTokens);
   const tokenRegex = /[^\w\s]+|->|>[A-Za-z]+/g;
@@ -415,5 +415,11 @@ export function findInvalidTokens(content, validTokens) {
     }
     if (!isValidCombo) invalid.push(tok);
   }
-  return invalid;
+  // Optionally forbid raw quotes/backslashes (only when forbidSpecial=true)
+  if (forbidSpecial) {
+    const special = Array.from(new Set((content.match(/["\\]/g) || [])));
+    invalid.push(...special);
+  }
+  // Deduplicate and return
+  return Array.from(new Set(invalid));
 }
