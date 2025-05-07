@@ -1,0 +1,301 @@
+Lbl AA
+:ClrHome
+:Menu("Main Menu","Where am I?",AC,"Begin/Reset",AD,"North Corridor",AE,"East Corridor",AL,"West Corridor",AS,"EXIT DOOR",AX)
+
+Lbl AC
+:ClrHome
+:Disp "YOU WAKE UP IN A SMALL"
+:Disp "ROOM. THREE PASSAGES"
+:Disp "BRANCH FROM THE ROOM, AND"
+:Disp "A LARGE, STURDY DOOR"
+:Disp "STANDS BEHIND YOU."
+:Pause ""
+:Disp "YOU NEED TO GET OUT OF"
+:Disp "HERE."
+:Pause ""
+:Goto AA
+
+Lbl AD
+:0→R
+:0→A
+:0→B
+:0→C
+:0→X
+:0→K
+:0→N
+:ClrHome
+:Disp "YOU FEEL READY."
+:Pause ""
+:Goto AA
+
+Lbl AE
+:ClrHome
+:Menu("North Corridor","Door A",AF,"Door B",AG,"Hidden Niche",AH,"Stairs Down",AI,"Back",AA)
+
+Lbl AF
+:ClrHome
+:If (R=1)
+Then
+:Disp "THE DOOR SLOWLY"
+:Disp "CREAKS OPEN..."
+:Pause ""
+:Disp "..."
+:Pause ""
+:Disp "..!"
+:Pause ""
+:Disp "IT'S A CLOSET."
+:Pause ""
+:Disp "..."
+:Pause ""
+:Disp "THERE'S A BIGGER KEY"
+:Disp "IN A JACKET POCKET"
+:1→K
+Else
+:Disp "A SMALL KEY LAYS AT"
+:Disp "THE FOOT OF THE DOOR"
+:Pause ""
+:Disp "YOU INSERT IT INTO"
+:Disp "THE KEYHOLE"
+:Pause ""
+:Disp "THE KEY SNAPS OFF"
+:Disp "AS YOU TWIST IT"
+End
+:Pause ""
+:Goto AE
+
+Lbl AG
+:ClrHome
+:If (A=0) and (B=1) and (C=1)
+Then
+:Disp "AS YOU PUSH OPEN THE"
+:Disp "DOOR, SOMETHING NEW"
+:Disp "MOVES BEHIND THE WALL."
+:1→N
+:Pause ""
+:Disp "THE DOOR REVEALS A"
+:Disp "SHALLOW WALL WITH THE"
+:Disp "FOLLOWING INSCRIPTION:"
+:Disp "↓ ↓ ↑"
+Else
+:Disp "LOCKED BY AN"
+:Disp "INTERNAL MECHANISM"
+End
+:Pause ""
+:Goto AE
+
+Lbl AH
+:ClrHome
+:Disp "A tragedy to see such a"
+:Disp "poor run."
+:Pause ""
+:Disp "Be careful not to be so"
+:Disp "unlevel."
+:Pause ""
+:Disp "For down the stairs, forty"
+:Disp "floors down, lies the key"
+:Disp "to your salvation."
+:Pause ""
+:Goto AE
+
+Lbl AI
+:ClrHome
+:Menu("Stairs Down","Whisper",AJ,"Stairs Down",AK,"Back",AE)
+
+Lbl AJ
+:randInt(1,5)→X
+:ClrHome
+:If (X=1)
+Then
+:Disp "A great treasure lies"
+:Disp "Somewhere below..."
+End
+:If (X=2)
+Then
+:Disp "A distant voice beckons"
+:Disp "you lower..."
+:End
+:If (X=3)
+Then
+:Disp "You can just make out the"
+:Disp "sounds of footsteps"
+:Disp "somewhere beneath you..."
+End
+:If (X=4)
+Then
+:Disp "You feel tired and a"
+:Disp "little light headed, and"
+:Disp "you can't quite remember"
+:Disp "how long you've been"
+:Disp "walking..."
+End
+:If (X=5)
+Then
+:Disp "THREE LEVERS BEND"
+:Disp "THE PATH AHEAD"
+:Disp "↑ ↓ ↓"
+End
+:Pause ""
+:Goto AI
+
+Lbl AK
+:Goto AI
+
+Lbl AL
+:ClrHome
+:Menu("East Corridor","Riddle Wall",AM,"Lever Room",AN,"Mirror",AR,"Back",AA)
+
+Lbl AM
+:ClrHome
+:Disp "The wall is composed"
+:Disp "entirely of rough,"
+:Disp "unrecognizable glyphs."
+:Pause ""
+:Goto AL
+
+Lbl AN
+:ClrHome
+:Menu("Lever Room","Lever A",AO,"Lever B",AP,"Lever C",AQ,"Back",AL)
+
+Lbl AO
+:ClrHome
+:If (A=0)
+Then
+:Disp "You pull Lever A down"
+:1→A
+Else
+:Disp "You pull Lever A up"
+:0→A
+End
+:Pause ""
+:Disp "Something behind the wall"
+:Disp "slowly shifts..."
+:Pause ""
+:Goto AN
+
+Lbl AP
+:ClrHome
+:If (B=0)
+Then
+:Disp "You pull Lever B down"
+:1→B
+Else
+:Disp "You pull Lever B up"
+:0→B
+End
+:Pause ""
+:Disp "Something behind the wall"
+:Disp "slowly shifts..."
+:Pause ""
+:Goto AN
+
+Lbl AQ
+:ClrHome
+:If (C=0)
+Then
+:Disp "You pull Lever C down"
+:1→C
+Else
+:Disp "You pull Lever C up"
+:0→C
+End
+:Pause ""
+:Disp "Something behind the wall"
+:Disp "slowly shifts..."
+:Pause ""
+:Goto AN
+
+Lbl AR
+:ClrHome
+:Disp "It's you!"
+:Pause ""
+:Disp "..."
+:Pause ""
+:Disp "..."
+:Pause ""
+:Disp "You reach in, and..."
+:Pause ""
+:Goto AU
+
+Lbl AS
+:ClrHome
+:Menu("West Corridor","Crossroads",AT,"Rusted Gate",AW,"Back",AA)
+
+Lbl AT
+:ClrHome
+:Menu("Crossroads","Empty Cellar",AU,"Hot Rune",AV,"Back",AS)
+
+Lbl AU
+:ClrHome
+:Disp "dust"
+:Pause ""
+:Disp "and dust"
+:Pause ""
+:Disp "and dust"
+:Pause ""
+:Disp "and dust"
+:Pause ""
+:Disp "and shadows"
+:Pause ""
+:Goto AT
+
+Lbl AV
+:ClrHome
+:If (R=1)
+Then
+:Disp "IT'S A RUNE..."
+Else
+:Disp "IT'S A HOT RUNE."
+:Pause ""
+:Disp "IT'S REALLY HOT."
+:Pause ""
+:Disp "YOU... TOUCH IT."
+:Pause ""
+:Disp "YEEEEOOOOOOOOOOOWCH"
+:Pause ""
+:Disp "..."
+:Pause ""
+:Disp "THE RUNE COOLS DOWN"
+:1→R
+End
+:Pause ""
+:Goto AT
+
+Lbl AW
+:ClrHome
+:Disp "A RUSTED GATE STANDS"
+:Disp "IN YOUR WAY."
+:Pause ""
+:Disp "ITS LOCKED..."
+:Pause ""
+:Disp "YOU GIVE IT A PUSH,"
+:Disp "AND THE HINGE SNAPS"
+:Disp "LIKE A RUBBER BAND,"
+:Pause ""
+:Disp "THE GATE IS OPEN."
+:Pause ""
+:Goto AS
+
+Lbl AX
+:ClrHome
+:If (A=1) and (B=1) and (C=0) and (N=1) and (K=1)
+Then
+:Disp "DOOR EMITS A SURREAL"
+:Disp "HUM, FILLING THE ROOM"
+:Disp "WITH A HEAVY SADNESS."
+:Pause ""
+:Disp "THE DOOR OPENS!"
+:Pause ""
+:Stop
+Else
+:Disp "THE DOOR BEFORE YOU "
+:Disp "IS BARRED WITH STONE"
+:Disp "AND WIRE, SPIRALLING"
+:Disp "AROUND A LARGE KEYHOLE"
+:Pause ""
+:Disp "YOU CAN MAKE OUT THE"
+:Disp "DAYLIGHT UNDER THE "
+:Disp "DOORFRAME, BUT A PUSH"
+:Disp "DOES NOT OPEN IT."
+:Pause ""
+End
+:Goto AA

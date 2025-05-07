@@ -22,7 +22,6 @@ export function wrapText(text, width) {
 
 // Generate TI-Basic code from the app structure
 export function generateTIBasicCode(appStructure) {
-  // Adapted from App_old.js
   const app = {
     chars_per_line: appStructure.chars_per_line,
     lines_per_screen: appStructure.lines_per_screen,
@@ -244,14 +243,13 @@ export function parseBasicCode(code) {
     const pages = code.split(/\n\s*\n/).filter(page => page.trim() !== '');
     const pageMap = {};
     const menuPages = [];
-    let quitPage = null;
     pages.forEach(page => {
       const lines = page.split('\n');
       if (lines.length < 2) return;
       const labelMatch = lines[0].match(/Lbl\s+([A-Z]{2})/);
       if (!labelMatch) return;
       const label = labelMatch[1];
-      if (lines[1].includes(':ClrHome') && lines[2] && lines[2].includes(':Menu(')) {
+      if (lines[1].includes(':ClrHome') && lines[2] && lines[2].includes(':Menu(')) {  // Menu page
         const menuContent = lines[2].replace(':Menu(', '').replace(')', '');
         const menuParts = menuContent.split(',');
         const title = menuParts[0].replace(/^"(.+)"$/, '$1');
@@ -267,7 +265,12 @@ export function parseBasicCode(code) {
         }
         menuPages.push({ label, title, entries, parentLabel });
         pageMap[label] = { type: 'menu', label, title, entries, parentLabel };
-      } else if (lines[1].includes(':ClrHome') && lines.some(l => l.includes(':Disp '))) {
+      } else if (
+        lines[1].includes(':ClrHome') &&  // Clear home is 2nd line
+        lines.some(l => l.includes(':Disp ')) &&  // Display line
+        !(lines.some(l => l.includes('→'))) &&  // No assignment
+        !(lines.some(l => l.includes(':If'))))  // No conditionals
+      {  // Note page
         let parentLabel = null;
         for (const l of lines) {
           const m = l.match(/:Goto\s+([A-Z]{2})/);
@@ -275,7 +278,6 @@ export function parseBasicCode(code) {
         }
         const displayLines = [];
         const sections = [];
-        let isNewSection = false;
         for (let i = 2; i < lines.length; i++) {
           const l = lines[i];
           const dispMatch = l.match(/:Disp\s+"(.+)"/);
@@ -295,11 +297,9 @@ export function parseBasicCode(code) {
         if (displayLines.length) { sections.push(displayLines.join('\n')); }
         const content = sections.join('\n\n');
         pageMap[label] = { type: 'note', label, content, parentLabel };
-      } else if (lines[1].includes(':Stop')) {
-        // Quit page
-        quitPage = { label };
+      } else if (lines[1].includes(':Stop')) {  // Quit page
         pageMap[label] = { type: 'quit', label };
-      } else {
+      } else {  // Code page
         // Unrecognized page structure: treat as raw code block
         // Find parent via any Goto statement
         let parentLabel = null;

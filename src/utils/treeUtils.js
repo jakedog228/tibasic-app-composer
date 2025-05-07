@@ -1,6 +1,6 @@
 /**
  * Remove the node whose id === targetId from a tree and return
- *   { tree: <newRoot>, extracted: <removedNode | null> }.
+ *   { tree: <newRoot>, extracted: <removedNode> }.
  *
  * Both the returned tree and every modified branch are NEW objects
  * (no in‑place mutation) so React state updates stay predictable.

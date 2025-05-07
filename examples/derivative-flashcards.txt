@@ -1,0 +1,118 @@
+Lbl AA
+:ClrHome
+:Menu("Main Menu","Random Flashcard",AC,"Flashcards",AD,"Quit",AB)
+
+Lbl AB
+:Stop
+
+Lbl AC
+:randInt(1,8)→X
+:ClrHome
+:If (X=1)
+Then
+:Goto AE
+End
+:If (X=2)
+Then
+:Goto AF
+End
+:If (X=3)
+Then
+:Goto AG
+End
+:If (X=4)
+Then
+:Goto AH
+End
+:If (X=5)
+Then
+:Goto AI
+End
+:If (X=6)
+Then
+:Goto AJ
+End
+:If (X=7):
+Then
+:Goto AK
+End
+:If (X=8)
+Then
+:GotoAL
+End
+
+Lbl AD
+:ClrHome
+:Menu("Flashcards","Power Rule",AE,"Sum and Difference Rule",AF,"Product Rule",AG,"Quotient Rule",AH,"Chain Rule",AI,"Trigonometric Functions",AJ,"e^(cx)",AK,"1/x",AL,"Back",AA)
+
+Lbl AE
+:ClrHome
+:Disp "f(x) = x^n"
+:Pause ""
+:Disp "f'(x) = nx^(n-1)"
+:Pause ""
+:Goto AD
+
+Lbl AF
+:ClrHome
+:Disp "f(x) = u(x) + v(x)"
+:Disp "f(x) = u(x) - v(x)"
+:Pause ""
+:Disp "f'(x) = u'(x) + v'(x)"
+:Disp "f'(x) = u'(x) - v'(x)"
+:Pause ""
+:Goto AD
+
+Lbl AG
+:ClrHome
+:Disp "f(x) = u(x) * v(x)"
+:Pause ""
+:Disp "f'(x) = u'(x)v(x) +"
+:Disp "u(x)v'(x)"
+:Pause ""
+:Goto AD
+
+Lbl AH
+:ClrHome
+:Disp "f(x) = u(x) / v(x)"
+:Pause ""
+:Disp "f'(x) = [v(x)u'(x) -"
+:Disp "u(x)v'(x)] / [v(x)]^2"
+:Pause ""
+:Goto AD
+
+Lbl AI
+:ClrHome
+:Disp "f(x) = g(h(x))"
+:Pause ""
+:Disp "f'(x) = g'(h(x)) * h'(x)"
+:Pause ""
+:Goto AD
+
+Lbl AJ
+:ClrHome
+:Disp "sin(x)"
+:Disp "cos(x)"
+:Disp "tan(x)"
+:Pause ""
+:Disp "cos(x)"
+:Disp "-sin(x)"
+:Disp "sec^2(x)"
+:Pause ""
+:Goto AD
+
+Lbl AK
+:ClrHome
+:Disp "e^(cx)"
+:Pause ""
+:Disp "(1/c)e^(cx)"
+:Pause ""
+:Goto AD
+
+Lbl AL
+:ClrHome
+:Disp "1/x"
+:Pause ""
+:Disp "ln|x|"
+:Pause ""
+:Goto AD

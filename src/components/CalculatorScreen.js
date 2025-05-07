@@ -90,20 +90,16 @@ export default function CalculatorScreen({
         screenContent = <div className="screen-message">Error parsing note code</div>;
       } else {
         const elements = [];
-        let lineCount = 0;
         for (let i = 0; i < parsed.length; i++) {
           const itm = parsed[i];
           if (itm.type === 'text') {
             elements.push(<div key={i} className="note-line">{itm.content}</div>);
-            lineCount++;
           } else if (itm.type === 'pause') {
             elements.push(<div key={i} className="paragraph-break"><div className="pause-indicator">Pause...</div></div>);
           } else if (itm.type === 'pauseAndClear') {
             elements.push(<div key={i} className="paragraph-break"><div className="pause-indicator clear-screen">Pause... [Clear Screen]</div></div>);
-            lineCount = 0;
           } else if (itm.type === 'clear') {
             elements.push(<div key={i} className="paragraph-break"><div className="pause-indicator clear-screen">[Clear Screen]</div></div>);
-            lineCount = 0;
           }
         }
         screenContent = <div className="note-content-preview">{elements}</div>;

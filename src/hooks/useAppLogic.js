@@ -90,7 +90,7 @@ export default function useAppLogic() {
       setAppStructure(prev => ({ ...prev, invalidTokensMap: invalidMap }));
     }
     validateAllTextItems();
-  }, [appStructure.validTokens]);
+  }, [appStructure.root, appStructure.validTokens]);
 
   // Select an item (menu, note, or code block)
   const onSelect = (item) => {

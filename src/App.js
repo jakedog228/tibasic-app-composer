@@ -26,7 +26,6 @@ function App() {
     moveItem,
     updateItem,
     handleContentChange,
-    updateSettings,
     handleImport,
     handleImportFile,
     handleExport,
@@ -38,7 +37,7 @@ function App() {
     <DndProvider backend={HTML5Backend}>
       <div className="app-container">
         <div className="app-header">
-          <h1>TI-Basic App Generator</h1>
+          <h1>TI-Basic App Composer</h1>
           <div className="settings">
             {/* TODO: add settings inputs for chars_per_line, lines_per_screen, max_items_per_menu */}
           </div>
