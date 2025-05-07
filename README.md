@@ -1,4 +1,4 @@
-# TI‑Basic Program Builder
+# TI‑Basic App Composer
 
 *A drag‑and‑drop React web-application for assembling multi‑module TI‑Basic programs for TI‑84 Plus & family graphing calculators.*
 
