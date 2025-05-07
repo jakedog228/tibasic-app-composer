@@ -100,7 +100,7 @@ A rough example with **TI Connect CE**:
 ![](examples/Screenshot%202025-05-07%20162829.png)
 - A simple program that selects a flashcard at random from a list of notes using a single code block!
 - Uses `randInt` to select a random note, and `Goto` to display it.
-- Compartmentalizes the notes in a menu structure, allowing for easy extensibility (e.g. recurse the menus!).
+- Compartmentalizes the notes in a menu structure, allowing for easy extensibility (e.g. nest the menus!).
 
 ---
 
