@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/tibasic-app-composer/static/css/main.20e45b6d.css",
+    "main.css": "/tibasic-app-composer/static/css/main.844b1831.css",
     "main.js": "/tibasic-app-composer/static/js/main.1f33fc2d.js",
     "static/media/texas_instruments_ti84_series.eot": "/tibasic-app-composer/static/media/texas_instruments_ti84_series.aec7c7245d5576f3879b.eot",
     "index.html": "/tibasic-app-composer/index.html",
-    "main.20e45b6d.css.map": "/tibasic-app-composer/static/css/main.20e45b6d.css.map",
+    "main.844b1831.css.map": "/tibasic-app-composer/static/css/main.844b1831.css.map",
     "main.1f33fc2d.js.map": "/tibasic-app-composer/static/js/main.1f33fc2d.js.map"
   },
   "entrypoints": [
-    "static/css/main.20e45b6d.css",
+    "static/css/main.844b1831.css",
     "static/js/main.1f33fc2d.js"
   ]
 }
