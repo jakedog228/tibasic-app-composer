@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
 
@@ -12,6 +12,20 @@ import CodePreview from './components/CodePreview';
 import ImportModal from './components/ImportModal';
 
 function App() {
+  // Theme state for light/dark mode, persisted in localStorage
+  const [theme, setTheme] = useState('light');
+  useEffect(() => {
+    const saved = localStorage.getItem('theme');
+    if (saved === 'dark') {
+      setTheme('dark');
+    }
+  }, []);
+  useEffect(() => {
+    localStorage.setItem('theme', theme);
+    document.body.classList.toggle('dark-mode', theme === 'dark');
+  }, [theme]);
+  const toggleTheme = () => setTheme(prev => (prev === 'dark' ? 'light' : 'dark'));
+  
   const {
     appStructure,
     generatedCode,
@@ -37,13 +51,16 @@ function App() {
     <DndProvider backend={HTML5Backend}>
       <div className="app-container">
         <div className="app-header">
-          <h1>TI-Basic App Composer</h1>
+          <div className="header-content">
+            <h1>TI-Basic App Composer</h1>
+            <p className="app-description">A drag‑and‑drop web-application for assembling multi‑module TI‑Basic programs for Texas Instruments graphing calculators.</p>
+          </div>
           <div className="settings">
             {/* TODO: add settings inputs for chars_per_line, lines_per_screen, max_items_per_menu */}
           </div>
           <div className="import-export">
-            <button onClick={() => setImportModalOpen(true)}>Import</button>
-            <button onClick={handleExport}>Export</button>
+            <button onClick={() => setImportModalOpen(true)}>Load File</button>
+            <button onClick={handleExport}>Save As</button>
           </div>
         </div>
 
@@ -109,6 +126,21 @@ function App() {
             onImport={handleImport}
           />
         )}
+        {/* Theme toggle button with icon */}
+        <div className="theme-toggle">
+          <button
+            className="theme-toggle-button"
+            onClick={toggleTheme}
+            aria-label={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+            title={theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          >
+            {theme === 'dark' ? (
+              <span className="theme-toggle-icon sun-icon"></span>
+            ) : (
+              <span className="theme-toggle-icon moon-icon"></span>
+            )}
+          </button>
+        </div>
       </div>
     </DndProvider>
   );

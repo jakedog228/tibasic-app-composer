@@ -14,7 +14,7 @@ export default function ImportModal({
         <h2>Import TI-Basic Code</h2>
         <p>Paste your TI-Basic code below or select a file:</p>
         <div className="file-input">
-          <input type="file" accept=".txt" onChange={onFileChange} />
+          <input type="file" accept=".tibasic" onChange={onFileChange} />
         </div>
         <textarea
           value={importCode}

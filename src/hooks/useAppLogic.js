@@ -263,10 +263,10 @@ export default function useAppLogic() {
       }
     }
   };
-  // Update application settings
-  const updateSettings = (settings) => {
-    setAppStructure(prev => ({ ...prev, ...settings }));
-  };
+  // // Update application settings
+  // const updateSettings = (settings) => {
+  //   setAppStructure(prev => ({ ...prev, ...settings }));
+  // };
   // Import TI-Basic code to rebuild structure
   const handleImport = () => {
     const newStruct = parseBasicCode(importCode);
@@ -295,7 +295,7 @@ export default function useAppLogic() {
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = 'tibasic-app.txt';
+    a.download = 'tibasic-app.tibasic';
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
