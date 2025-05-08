@@ -1,7 +1,7 @@
 /**
  * Utility functions for TI-Basic parsing and generation.
  */
-// Text wrapping utility (simplified version of Python's textwrap)
+// Text wrapping utility
 export function wrapText(text, width) {
   const words = text.split(' ');
   const lines = [];
@@ -139,7 +139,7 @@ export function generateTIBasicCode(appStructure) {
       return label;
     },
     render: function() {
-      // Assume a Python-like rendering: build string
+      // build string
       let output = '';
       for (const label of this.page_order) {
         const page = this.pages[label];

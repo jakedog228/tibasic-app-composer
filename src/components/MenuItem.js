@@ -43,7 +43,7 @@ export default function MenuItem({ item, onSelect, onAddMenu, onAddNote, onAddCo
           maxItemsPerMenu: appStructure.max_items_per_menu
         });
 
-        console.log(`canDrop: ${draggedItem.id} -> ${item.id} (${pos})`, isValidDrop);
+        // console.log(`canDrop: ${draggedItem.id} -> ${item.id} (${pos})`, isValidDrop);
         return !!isValidDrop;
       }
       return true;
@@ -70,13 +70,6 @@ export default function MenuItem({ item, onSelect, onAddMenu, onAddNote, onAddCo
       else if (y > rect.height * 0.75) potential = 'after';
       else if (item.type === 'menu') { potential = 'inside'; inside = true; }
       let targetPos = potential;
-      // let targetDisallowed = false;
-      // if (inside && isLimitReached) {
-      //   targetPos = 'after';
-      //   targetDisallowed = true;
-      // }
-      // if (targetPos !== currPos) setDropPosition(targetPos);
-      // if (targetDisallowed !== currDisallowed) setIsHoveringInsideDisallowed(targetDisallowed);
       const isValidDrop = findTarget(appStructure.root, {
         draggedId: draggedItem.id,
         targetId: item.id,

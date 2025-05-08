@@ -316,7 +316,7 @@ export default function useAppLogic() {
     moveItem,
     updateItem,
     handleContentChange,
-    updateSettings,
+    // updateSettings,
     handleImport,
     handleImportFile,
     handleExport,
