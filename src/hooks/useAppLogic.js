@@ -263,10 +263,6 @@ export default function useAppLogic() {
       }
     }
   };
-  // // Update application settings
-  // const updateSettings = (settings) => {
-  //   setAppStructure(prev => ({ ...prev, ...settings }));
-  // };
   // Import TI-Basic code to rebuild structure
   const handleImport = () => {
     const newStruct = parseBasicCode(importCode);
@@ -316,7 +312,6 @@ export default function useAppLogic() {
     moveItem,
     updateItem,
     handleContentChange,
-    // updateSettings,
     handleImport,
     handleImportFile,
     handleExport,

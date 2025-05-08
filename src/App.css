@@ -332,6 +332,7 @@
 }
 
 .icon-button {
+  font-size: 13px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -346,21 +347,6 @@
 
 .icon-button:hover {
   background-color: rgba(0, 0, 0, 0.05);
-}
-
-.icon-button.add-menu .icon {
-  font-size: 14px;
-  color: #1976d2;
-}
-
-.icon-button.add-note .icon {
-  font-size: 14px;
-  color: #ffc107;
-}
-
-.icon-button.delete .icon {
-  font-size: 14px;
-  color: #f44336;
 }
 
 .item-children {
@@ -645,18 +631,6 @@ body.dark-mode .menu-item.code {
 /* Buttons and Controls */
 body.dark-mode .icon-button:hover {
   background-color: rgba(255, 255, 255, 0.1);
-}
-
-body.dark-mode .icon-button.add-menu .icon {
-  color: #64b5f6;
-}
-
-body.dark-mode .icon-button.add-note .icon {
-  color: #ffd54f;
-}
-
-body.dark-mode .icon-button.delete .icon {
-  color: #ff5252;
 }
 
 body.dark-mode .collapse-toggle:hover {
