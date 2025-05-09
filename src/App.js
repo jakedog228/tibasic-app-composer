@@ -18,6 +18,11 @@ function App() {
     const saved = localStorage.getItem('theme');
     if (saved === 'dark') {
       setTheme('dark');
+    } else if (saved === 'light') {
+      setTheme('light');
+    } else {  // if not set, check system preference
+      const isDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches;
+      setTheme(isDarkMode ? 'light' : 'dark');
     }
   }, []);
   useEffect(() => {
@@ -126,6 +131,7 @@ function App() {
             onImport={handleImport}
           />
         )}
+
         {/* Theme toggle button with icon */}
         <div className="theme-toggle">
           <button
@@ -141,6 +147,16 @@ function App() {
             )}
           </button>
         </div>
+
+        <div className="source-link">
+          Source code & documentation:
+          <a href="https://github.com/jakedog228/tibasic-app-composer"
+             target="_blank"
+             rel="noopener noreferrer">
+            https://github.com/jakedog228/tibasic-app-composer
+          </a>
+        </div>
+
       </div>
     </DndProvider>
   );
