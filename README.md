@@ -104,6 +104,14 @@ A rough example with **TI Connect CE**:
 
 ---
 
+## Extra
+
+### Now also in Dark Mode!
+
+![](examples/Screenshot%202025-05-09%20000639.png)
+
+---
+
 ## Advanced
 
 ### Token Validation
