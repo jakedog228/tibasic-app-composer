@@ -732,9 +732,11 @@ body.dark-mode .theme-toggle-button {
   width: 24px;
   height: 24px;
   transition: transform 0.3s ease;
+  transform:rotate(0deg);      /* keep a transform all the time */
+  will-change:transform;       /* hints the browser to keep the layer */
 }
 
-/* Optional animation for icon switch */
+/* Animation for icon switch */
 .theme-toggle-button:hover .theme-toggle-icon {
   transform: rotate(30deg);
 }
@@ -752,9 +754,10 @@ body.dark-mode .theme-toggle-button {
          transparent calc(50% + var(--w)/2);
 
   /*margin:calc(var(--s) + var(--o) + 10px);*/
-  width:12px;
-  height:12px;
+  width:calc(12px + var(--w));;
+  height:calc(12px + var(--w));;
   display:inline-block;
+  box-sizing:border-box;
   border:3px solid var(--c);
   border-radius:50%;
   position:relative;
@@ -777,8 +780,6 @@ body.dark-mode .theme-toggle-button {
     /* */
   -webkit-mask:radial-gradient(farthest-side,transparent calc(100% - var(--s)),#fff calc(100% - var(--s)));
           mask:radial-gradient(farthest-side,transparent calc(100% - var(--s)),#fff calc(100% - var(--s)));
-
-  transform: rotate(45deg);
 }
 
 /* Moon icon */
@@ -846,8 +847,6 @@ body.dark-mode .app-description {
   bottom: 12px;
   right: 12px;
   font-size: 0.8rem;
-  color: rgba(0,0,0,0.7);
-  background: rgba(255,255,255,0.85);
   padding: 4px 8px;
   border-radius: 4px;
   z-index: 9999;
@@ -856,6 +855,9 @@ body.dark-mode .app-description {
   color: #0366d6;
   text-decoration: none;
   margin: 0 0 0 3px;
+}
+body.dark-mode .source-link a {
+  color: #58a6ff;
 }
 .source-link a:hover {
   text-decoration: underline;
